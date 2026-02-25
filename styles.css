@@ -1,7 +1,9 @@
 :root {
-    --primary: #D4BBA5; /* Soft beige/pastel */
+    --primary: #D4BBA5;
+    /* Soft beige/pastel */
     --primary-hover: #C5A58A;
-    --background: #FAFAF7; /* Very light beige */
+    --background: #FAFAF7;
+    /* Very light beige */
     --card-bg: #FFFFFF;
     --text-main: #333333;
     --text-muted: #666666;
@@ -177,6 +179,138 @@ textarea {
     display: none !important;
 }
 
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.tab-btn.active {
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* Save Actions */
+.save-actions {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #FCFBFA;
+    border-radius: var(--radius);
+    text-align: center;
+    border: 1px dashed var(--border);
+}
+
+.save-actions p {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.btn-success {
+    background-color: #A3D9A5;
+    color: #2A2A2A;
+    padding: 8px 16px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.btn-success:hover {
+    background-color: #8CCB8E;
+}
+
+.btn-danger {
+    background-color: #F4A5A5;
+    color: #2A2A2A;
+    padding: 8px 16px;
+    margin-bottom: 5px;
+}
+
+.btn-danger:hover {
+    background-color: #E88F8F;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.crm-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.crm-header h2 {
+    font-size: 2rem;
+    color: #2A2A2A;
+}
+
+.col-title {
+    text-align: center;
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.interested-title {
+    background-color: #8CCB8E;
+}
+
+.bounced-title {
+    background-color: #E88F8F;
+}
+
+.lead-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.lead-card h4 {
+    margin-bottom: 5px;
+}
+
+.lead-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.btn-auto {
+    background-color: var(--primary);
+    color: #fff;
+    padding: 6px 12px;
+    width: 100%;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.btn-auto:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-auto:disabled {
+    background-color: #E8E5DF;
+    color: #999;
+    cursor: not-allowed;
+}
+
 /* Loading Animation */
 .loading-spinner {
     width: 40px;
@@ -189,8 +323,13 @@ textarea {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 footer {
@@ -225,7 +364,7 @@ footer {
     header h1 {
         font-size: 2rem;
     }
-    
+
     .output-header {
         flex-direction: column;
         align-items: flex-start;
@@ -236,8 +375,12 @@ footer {
         width: 100%;
         justify-content: space-between;
     }
-    
+
     .btn-secondary {
         flex: 1;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
     }
 }

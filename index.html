@@ -17,87 +17,126 @@
         </header>
 
         <main>
-            <section class="card input-section">
-                <h2>Your Details</h2>
-                <div class="form-group">
-                    <label for="userName">Your Name</label>
-                    <input type="text" id="userName" placeholder="e.g. Alex Johnson" required>
+            <div class="tabs">
+                <button id="tabGenerate" class="tab-btn active">Pitch Generator</button>
+                <button id="tabDashboard" class="tab-btn">My Leads Dashboard</button>
+            </div>
+
+            <!-- Pitch Generator View -->
+            <div id="viewGenerate" class="view-section active">
+                <section class="card input-section">
+                    <h2>Your Details</h2>
+                    <div class="form-group">
+                        <label for="userName">Your Name</label>
+                        <input type="text" id="userName" placeholder="e.g. Alex Johnson" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userNiche">Your Niche</label>
+                        <input type="text" id="userNiche" placeholder="e.g. Tech Reviewer, Travel Vlogger" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brandName">Brand Name</label>
+                        <input type="text" id="brandName" placeholder="e.g. Nike, Apple" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="collabType">Collaboration Type</label>
+                        <select id="collabType">
+                            <option value="paid_partnership">Paid Partnership</option>
+                            <option value="internship">Internship</option>
+                            <option value="event_invite">Event Invite</option>
+                            <option value="product_collab">Product Collaboration</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tone">Tone</label>
+                        <select id="tone">
+                            <option value="professional">Professional</option>
+                            <option value="friendly">Friendly</option>
+                            <option value="confident">Confident</option>
+                        </select>
+                    </div>
+
+                    <button id="generateBtn" class="btn-primary">Generate Pitch</button>
+                    <div id="loading" class="loading-spinner hidden"></div>
+                </section>
+
+                <section id="outputSection" class="card output-section hidden">
+                    <div class="output-header">
+                        <h2>Generated Pitch Options</h2>
+                        <div class="action-buttons">
+                            <button id="regenerateBtn" class="btn-secondary">Regenerate</button>
+                            <button id="downloadBtn" class="btn-secondary">Download .txt</button>
+                        </div>
+                    </div>
+
+                    <div class="save-actions">
+                        <p>Save this lead to your CRM dashboard:</p>
+                        <button id="btnInterested" class="btn-success">🌟 Mark as "Interested"</button>
+                        <button id="btnBounced" class="btn-danger">❌ Mark as "Bounced"</button>
+                    </div>
+
+                    <div class="output-group">
+                        <div class="output-label-row">
+                            <label>Email Subject Line</label>
+                            <button class="btn-copy" data-target="subjectOut">Copy</button>
+                        </div>
+                        <textarea id="subjectOut" rows="2"></textarea>
+                    </div>
+
+                    <div class="output-group">
+                        <div class="output-label-row">
+                            <label>Full Pitch Email</label>
+                            <button class="btn-copy" data-target="emailOut">Copy</button>
+                        </div>
+                        <textarea id="emailOut" rows="10"></textarea>
+                    </div>
+
+                    <div class="output-group">
+                        <div class="output-label-row">
+                            <label>Instagram DM Version</label>
+                            <button class="btn-copy" data-target="dmOut">Copy</button>
+                        </div>
+                        <textarea id="dmOut" rows="6"></textarea>
+                    </div>
+
+                    <div class="output-group">
+                        <div class="output-label-row">
+                            <label>Follow-up Message (5-day reminder)</label>
+                            <button class="btn-copy" data-target="followupOut">Copy</button>
+                        </div>
+                        <textarea id="followupOut" rows="5"></textarea>
+                    </div>
+                </section>
+            </div> <!-- End Generator View -->
+
+            <!-- CRM Dashboard View -->
+            <div id="viewDashboard" class="view-section hidden">
+                <div class="crm-header">
+                    <h2>CRM Dashboard</h2>
+                    <p>Manage your saved leads and send your 5-day automated follow-ups.</p>
                 </div>
+                <div class="dashboard-grid">
+                    <!-- Interested Column -->
+                    <div class="crm-column">
+                        <h3 class="col-title interested-title">🌟 Actually Interested</h3>
+                        <div id="listInterested" class="lead-list">
+                            <!-- Leads dynamically injected here -->
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="userNiche">Your Niche</label>
-                    <input type="text" id="userNiche" placeholder="e.g. Tech Reviewer, Travel Vlogger" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="brandName">Brand Name</label>
-                    <input type="text" id="brandName" placeholder="e.g. Nike, Apple" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="collabType">Collaboration Type</label>
-                    <select id="collabType">
-                        <option value="paid_partnership">Paid Partnership</option>
-                        <option value="internship">Internship</option>
-                        <option value="event_invite">Event Invite</option>
-                        <option value="product_collab">Product Collaboration</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="tone">Tone</label>
-                    <select id="tone">
-                        <option value="professional">Professional</option>
-                        <option value="friendly">Friendly</option>
-                        <option value="confident">Confident</option>
-                    </select>
-                </div>
-
-                <button id="generateBtn" class="btn-primary">Generate Pitch</button>
-                <div id="loading" class="loading-spinner hidden"></div>
-            </section>
-
-            <section id="outputSection" class="card output-section hidden">
-                <div class="output-header">
-                    <h2>Generated Pitch</h2>
-                    <div class="action-buttons">
-                        <button id="regenerateBtn" class="btn-secondary">Regenerate</button>
-                        <button id="downloadBtn" class="btn-secondary">Download .txt</button>
+                    <!-- Bounced Column -->
+                    <div class="crm-column">
+                        <h3 class="col-title bounced-title">❌ Bounced / No Reply</h3>
+                        <div id="listBounced" class="lead-list">
+                            <!-- Leads dynamically injected here -->
+                        </div>
                     </div>
                 </div>
-
-                <div class="output-group">
-                    <div class="output-label-row">
-                        <label>Email Subject Line</label>
-                        <button class="btn-copy" data-target="subjectOut">Copy</button>
-                    </div>
-                    <textarea id="subjectOut" rows="2"></textarea>
-                </div>
-
-                <div class="output-group">
-                    <div class="output-label-row">
-                        <label>Full Pitch Email</label>
-                        <button class="btn-copy" data-target="emailOut">Copy</button>
-                    </div>
-                    <textarea id="emailOut" rows="10"></textarea>
-                </div>
-
-                <div class="output-group">
-                    <div class="output-label-row">
-                        <label>Instagram DM Version</label>
-                        <button class="btn-copy" data-target="dmOut">Copy</button>
-                    </div>
-                    <textarea id="dmOut" rows="6"></textarea>
-                </div>
-
-                <div class="output-group">
-                    <div class="output-label-row">
-                        <label>Follow-up Message (5-day reminder)</label>
-                        <button class="btn-copy" data-target="followupOut">Copy</button>
-                    </div>
-                    <textarea id="followupOut" rows="5"></textarea>
-                </div>
-            </section>
+            </div> <!-- End Dashboard View -->
         </main>
 
         <footer>

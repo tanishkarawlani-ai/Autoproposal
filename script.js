@@ -4,13 +4,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const outputSection = document.getElementById('outputSection');
     const regenerateBtn = document.getElementById('regenerateBtn');
     const downloadBtn = document.getElementById('downloadBtn');
-    
+
     const subjectOut = document.getElementById('subjectOut');
     const emailOut = document.getElementById('emailOut');
     const dmOut = document.getElementById('dmOut');
     const followupOut = document.getElementById('followupOut');
 
     const toast = document.getElementById('toast');
+
+    // NEW CRM ELEMENTS
+    const tabGenerate = document.getElementById('tabGenerate');
+    const tabDashboard = document.getElementById('tabDashboard');
+    const viewGenerate = document.getElementById('viewGenerate');
+    const viewDashboard = document.getElementById('viewDashboard');
+
+    const btnInterested = document.getElementById('btnInterested');
+    const btnBounced = document.getElementById('btnBounced');
+    const listInterested = document.getElementById('listInterested');
+    const listBounced = document.getElementById('listBounced');
+
+    let currentLead = null;
+    let leads = JSON.parse(localStorage.getItem('autopitch_leads')) || [];
+
+    // TABS LOGIC
+    tabGenerate.addEventListener('click', () => {
+        tabGenerate.classList.add('active');
+        tabDashboard.classList.remove('active');
+        viewGenerate.classList.remove('hidden');
+        viewDashboard.classList.add('hidden');
+    });
+
+    tabDashboard.addEventListener('click', () => {
+        tabDashboard.classList.add('active');
+        tabGenerate.classList.remove('active');
+        viewDashboard.classList.remove('hidden');
+        viewGenerate.classList.add('hidden');
+        renderDashboard();
+    });
 
     // Templates library
     const templates = {
@@ -123,6 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const selectedTemplate = templates[tone][type];
 
+        currentLead = {
+            id: Date.now().toString(),
+            brand: brand,
+            subject: replacePlaceholders(selectedTemplate.subject, data),
+            followup: replacePlaceholders(selectedTemplate.followup, data),
+            dateCreated: new Date().toISOString()
+        };
+
         // Hide output and show loading
         generateBtn.style.display = 'none';
         loading.classList.remove('hidden');
@@ -151,16 +189,16 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', (e) => {
             const targetId = e.target.getAttribute('data-target');
             const textArea = document.getElementById(targetId);
-            
+
             textArea.select();
             document.execCommand('copy');
-            
+
             // Show toast
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 2000);
-            
+
             // Temporary button text change
             const originalText = e.target.innerText;
             e.target.innerText = "Copied!";
@@ -173,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Download functionality
     downloadBtn.addEventListener('click', () => {
         const brand = document.getElementById('brandName').value.trim() || "Brand";
-        
+
         const content = `
 AUTOPROPOSAL PITCH FOR ${brand.toUpperCase()}
 =========================================
@@ -201,4 +239,63 @@ ${followupOut.value}
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     });
+
+    // CRM LOGIC
+    function saveLead(status) {
+        if (!currentLead) return;
+        currentLead.status = status;
+        leads.push(currentLead);
+        localStorage.setItem('autopitch_leads', JSON.stringify(leads));
+
+        toast.innerText = `Saved to ${status === 'interested' ? 'Interested' : 'Bounced'} leads!`;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+            toast.innerText = "Copied to clipboard!"; // reset toast text
+        }, 2000);
+
+        currentLead = null;
+        tabDashboard.click();
+    }
+
+    btnInterested.addEventListener('click', () => saveLead('interested'));
+    btnBounced.addEventListener('click', () => saveLead('bounced'));
+
+    function renderDashboard() {
+        listInterested.innerHTML = '';
+        listBounced.innerHTML = '';
+
+        leads.forEach((lead, index) => {
+            const createdDate = new Date(lead.dateCreated);
+            const now = new Date();
+            const daysPassed = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
+
+            // For testing purposes, uncomment this to instantly simulate 5 days passed
+            // const isReadyForFollowup = true; 
+            const isReadyForFollowup = daysPassed >= 5;
+
+            const daysText = daysPassed === 0 ? "Generated Today" : `${daysPassed} day(s) ago`;
+            const buttonText = isReadyForFollowup ? "Send 5-Day Follow-up 🚀" : `Auto sends in ${5 - daysPassed} day(s) ⏰`;
+            const buttonDisabled = !isReadyForFollowup ? "disabled" : "";
+
+            const html = `
+                <div class="lead-card">
+                    <h4>${lead.brand}</h4>
+                    <p>${daysText}</p>
+                    <a href="mailto:?subject=Following up on ${lead.brand}&body=${encodeURIComponent(lead.followup)}" style="text-decoration:none;">
+                        <button class="btn-auto" ${buttonDisabled}>${buttonText}</button>
+                    </a>
+                </div>
+            `;
+
+            if (lead.status === 'interested') {
+                listInterested.innerHTML += html;
+            } else {
+                listBounced.innerHTML += html;
+            }
+        });
+
+        if (listInterested.innerHTML === '') listInterested.innerHTML = '<p style="font-size: 0.9rem; color:#999;">No interested leads saved yet.</p>';
+        if (listBounced.innerHTML === '') listBounced.innerHTML = '<p style="font-size: 0.9rem; color:#999;">No bounced leads saved yet.</p>';
+    }
 });
