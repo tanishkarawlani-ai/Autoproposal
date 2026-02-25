@@ -1,4 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // SUPABASE INTEGRATION
+    const supabaseUrl = 'https://eczdfebfkiynucgcdrxg.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjemRmZWJma2l5bnVjZ2NkcnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5ODY3MjgsImV4cCI6MjA4NzU2MjcyOH0.GMnPo1waltZwIxni8FD292koruV3zD9_v5Vx_8Mm51Y';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    const authContainer = document.getElementById('authContainer');
+    const appContainer = document.getElementById('appContainer');
+    const authTitle = document.getElementById('authTitle');
+    const authEmail = document.getElementById('authEmail');
+    const authPassword = document.getElementById('authPassword');
+    const authSubmitBtn = document.getElementById('authSubmitBtn');
+    const authToggleLink = document.getElementById('authToggleLink');
+    const authError = document.getElementById('authError');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let isLoginMode = true;
+
+    // Toggle between Login and Signup modes
+    authToggleLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        isLoginMode = !isLoginMode;
+        authTitle.innerText = isLoginMode ? "Sign In" : "Create Account";
+        authSubmitBtn.innerText = isLoginMode ? "Sign In" : "Sign Up";
+        authToggleLink.innerText = isLoginMode ? "Need an account? Sign Up" : "Already have an account? Sign In";
+        authError.innerText = "";
+    });
+
+    // Handle Authentication submission
+    authSubmitBtn.addEventListener('click', async () => {
+        const email = authEmail.value.trim();
+        const password = authPassword.value.trim();
+
+        if (!email || !password) {
+            authError.innerText = "Please fill in both email and password.";
+            return;
+        }
+
+        authSubmitBtn.innerText = "Processing...";
+        authSubmitBtn.disabled = true;
+        authError.innerText = "";
+
+        let error = null;
+
+        if (isLoginMode) {
+            const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+            error = signInError;
+        } else {
+            const { error: signUpError } = await supabase.auth.signUp({ email, password });
+            error = signUpError;
+            if (!error) {
+                authError.innerText = "Signup successful! You can now log in.";
+                authError.style.color = "#8CCB8E";
+                isLoginMode = true;
+                authTitle.innerText = "Sign In";
+                authSubmitBtn.innerText = "Sign In";
+                authToggleLink.innerText = "Need an account? Sign Up";
+            }
+        }
+
+        if (error) {
+            authError.style.color = "#E88F8F";
+            authError.innerText = error.message;
+        } else if (isLoginMode) {
+            checkSession();
+        }
+
+        if (isLoginMode) authSubmitBtn.innerText = "Sign In";
+        authSubmitBtn.disabled = false;
+    });
+
+    // Handle Logout
+    logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        checkSession();
+    });
+
+    // Check existing session
+    async function checkSession() {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            authContainer.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+        } else {
+            authContainer.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+        }
+    }
+
+    // Initialize Authentication state
+    checkSession();
+
+    // ORIGINAL UI ELEMENTS
     const generateBtn = document.getElementById('generateBtn');
     const loading = document.getElementById('loading');
     const outputSection = document.getElementById('outputSection');
