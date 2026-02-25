@@ -1,0 +1,17 @@
+# AutoProposal – Pitch Generator Tasks
+
+- [ ] Initialize project structure
+  - [ ] `index.html` (UI layout)
+  - [ ] `styles.css` (Soft beige/pastel theme, responsive)
+  - [ ] `script.js` (Logic for generating pitches and downloading)
+- [ ] Implement UI Components
+  - [ ] Input Form (Name, Niche, Brand Name, Collab Type, Tone)
+  - [ ] Generate Button with fake 1s loading animation
+  - [ ] Output Areas (Subject, Email, DM, Follow-up)
+- [ ] Implement Template Logic
+  - [ ] Define templates for Collaboration Types and Tones
+  - [ ] Variable interpolation function
+- [ ] Add Action Buttons (Copy, Regenerate, Download as .txt)
+- [ ] Polish and Test
+  - [ ] Verify mobile responsiveness
+  - [ ] Test template variations

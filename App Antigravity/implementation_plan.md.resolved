@@ -1,0 +1,31 @@
+# AutoProposal Web App Implementation
+
+Building a simple, clean, client-side only web app for generating collaboration pitches.
+
+## Proposed Changes
+
+### UI & Aesthetics
+#### [NEW] [index.html](file:///C:/Users/Tanishka%20Rawlani/.gemini/antigravity/scratch/auto-proposal/index.html)
+- Clean, semantic HTML structure.
+- Input section with tailored form fields.
+- Output section with editable text areas.
+
+#### [NEW] [styles.css](file:///C:/Users/Tanishka%20Rawlani/.gemini/antigravity/scratch/auto-proposal/styles.css)
+- Soft beige and pastel theme.
+- Minimal modern layout with rounded cards and smooth transitions.
+- Fully mobile responsive.
+
+### Logic & Automation
+#### [NEW] [script.js](file:///C:/Users/Tanishka%20Rawlani/.gemini/antigravity/scratch/auto-proposal/script.js)
+- Manage state and fake 1-second loading animation.
+- Basic templating engine leveraging plain JS dictionaries for different Collab Types and Tones.
+- Implement Copy to Clipboard, Regenerate, and Download as `.txt` functionalities.
+
+## Verification Plan
+
+### Manual Verification
+- Open `index.html` in a web browser.
+- Fill out the form fields and click 'Generate'.
+- Observe the 1-second loading animation and the generated text.
+- Verify that 'Copy' and 'Download as .txt' buttons work correctly.
+- Ensure the layout is mobile responsive by resizing the browser window.
