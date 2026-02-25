@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoProposal – Pitch Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>AutoProposal ✨</h1>
+            <p>Smart, automated pitch generator for your collaborations.</p>
+        </header>
+
+        <main>
+            <section class="card input-section">
+                <h2>Your Details</h2>
+                <div class="form-group">
+                    <label for="userName">Your Name</label>
+                    <input type="text" id="userName" placeholder="e.g. Alex Johnson" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="userNiche">Your Niche</label>
+                    <input type="text" id="userNiche" placeholder="e.g. Tech Reviewer, Travel Vlogger" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="brandName">Brand Name</label>
+                    <input type="text" id="brandName" placeholder="e.g. Nike, Apple" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="collabType">Collaboration Type</label>
+                    <select id="collabType">
+                        <option value="paid_partnership">Paid Partnership</option>
+                        <option value="internship">Internship</option>
+                        <option value="event_invite">Event Invite</option>
+                        <option value="product_collab">Product Collaboration</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tone">Tone</label>
+                    <select id="tone">
+                        <option value="professional">Professional</option>
+                        <option value="friendly">Friendly</option>
+                        <option value="confident">Confident</option>
+                    </select>
+                </div>
+
+                <button id="generateBtn" class="btn-primary">Generate Pitch</button>
+                <div id="loading" class="loading-spinner hidden"></div>
+            </section>
+
+            <section id="outputSection" class="card output-section hidden">
+                <div class="output-header">
+                    <h2>Generated Pitch</h2>
+                    <div class="action-buttons">
+                        <button id="regenerateBtn" class="btn-secondary">Regenerate</button>
+                        <button id="downloadBtn" class="btn-secondary">Download .txt</button>
+                    </div>
+                </div>
+
+                <div class="output-group">
+                    <div class="output-label-row">
+                        <label>Email Subject Line</label>
+                        <button class="btn-copy" data-target="subjectOut">Copy</button>
+                    </div>
+                    <textarea id="subjectOut" rows="2"></textarea>
+                </div>
+
+                <div class="output-group">
+                    <div class="output-label-row">
+                        <label>Full Pitch Email</label>
+                        <button class="btn-copy" data-target="emailOut">Copy</button>
+                    </div>
+                    <textarea id="emailOut" rows="10"></textarea>
+                </div>
+
+                <div class="output-group">
+                    <div class="output-label-row">
+                        <label>Instagram DM Version</label>
+                        <button class="btn-copy" data-target="dmOut">Copy</button>
+                    </div>
+                    <textarea id="dmOut" rows="6"></textarea>
+                </div>
+
+                <div class="output-group">
+                    <div class="output-label-row">
+                        <label>Follow-up Message (5-day reminder)</label>
+                        <button class="btn-copy" data-target="followupOut">Copy</button>
+                    </div>
+                    <textarea id="followupOut" rows="5"></textarea>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 AutoProposal. Local use only. No data stored.</p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">Copied to clipboard!</div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
