@@ -1,8 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // SUPABASE INTEGRATION
-    const supabaseUrl = 'https://eczdfebfkiynucgcdrxg.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVjemRmZWJma2l5bnVjZ2NkcnhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5ODY3MjgsImV4cCI6MjA4NzU2MjcyOH0.GMnPo1waltZwIxni8FD292koruV3zD9_v5Vx_8Mm51Y';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // FIREBASE INTEGRATION
+    const firebaseConfig = {
+        apiKey: "AIzaSyDndl68ZS2AgurPHbI_1MI0aEZX5BZPKIc",
+        authDomain: "autoproposal-20b7c.firebaseapp.com",
+        projectId: "autoproposal-20b7c",
+        storageBucket: "autoproposal-20b7c.firebasestorage.app",
+        messagingSenderId: "490762339816",
+        appId: "1:490762339816:web:5f89ff7a173e0c45ab505d",
+        measurementId: "G-1QFCT7Q0CC"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
     const authContainer = document.getElementById('authContainer');
     const appContainer = document.getElementById('appContainer');
@@ -43,26 +51,28 @@ document.addEventListener('DOMContentLoaded', () => {
         let error = null;
 
         if (isLoginMode) {
-            const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-            error = signInError;
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+            } catch (err) {
+                error = err;
+            }
         } else {
-            const { error: signUpError } = await supabase.auth.signUp({ email, password });
-            error = signUpError;
-            if (!error) {
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
                 authError.innerText = "Signup successful! You can now log in.";
                 authError.style.color = "#8CCB8E";
                 isLoginMode = true;
                 authTitle.innerText = "Sign In";
                 authSubmitBtn.innerText = "Sign In";
                 authToggleLink.innerText = "Need an account? Sign Up";
+            } catch (err) {
+                error = err;
             }
         }
 
         if (error) {
             authError.style.color = "#E88F8F";
             authError.innerText = error.message;
-        } else if (isLoginMode) {
-            checkSession();
         }
 
         if (isLoginMode) authSubmitBtn.innerText = "Sign In";
@@ -71,25 +81,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle Logout
     logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        checkSession();
+        await auth.signOut();
     });
 
-    // Check existing session
-    async function checkSession() {
-        const { data: { session } } = await supabase.auth.getSession();
-
-        if (session) {
+    // Check existing session state
+    auth.onAuthStateChanged((user) => {
+        if (user) {
             authContainer.classList.add('hidden');
             appContainer.classList.remove('hidden');
         } else {
             authContainer.classList.remove('hidden');
             appContainer.classList.add('hidden');
         }
-    }
-
-    // Initialize Authentication state
-    checkSession();
+    });
 
     // ORIGINAL UI ELEMENTS
     const generateBtn = document.getElementById('generateBtn');
